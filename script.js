@@ -47,82 +47,119 @@ const data = [
   ];
   
   /**
-   * Crea il carosello di immagini per un determinato item.
-   * Ogni immagine verrà caricata dalla cartella "Immagini".
+   * Crea il carosello per un determinato item, con effetto slide e swipe.
    */
   function createCarousel(item) {
-    // Creiamo il contenitore del carosello
+    // Contenitore principale del carosello
     const carousel = document.createElement('div');
     carousel.classList.add('carousel');
   
-    // Puliamo il contenuto e creiamo per ogni immagine una slide
-    carousel.innerHTML = '';
-    item.images.forEach((image, index) => {
+    // Crea il wrapper per le slide e lo popola
+    const slidesWrapper = document.createElement('div');
+    slidesWrapper.classList.add('slides-wrapper');
+  
+    item.images.forEach((image) => {
       const slideDiv = document.createElement('div');
       slideDiv.classList.add('slide');
-      // Mostriamo la prima slide impostandola come attiva
-      if (index === 0) slideDiv.classList.add('active');
   
       const imgElement = document.createElement('img');
       imgElement.src = `Immagini/${image}`;
-      slideDiv.appendChild(imgElement);
   
-      carousel.appendChild(slideDiv);
+      slideDiv.appendChild(imgElement);
+      slidesWrapper.appendChild(slideDiv);
     });
   
+    carousel.appendChild(slidesWrapper);
   
-    // Creiamo i pulsanti di controllo del carosello
+    // Crea i pulsanti di controllo (frecce)
     const prevButton = document.createElement('button');
     prevButton.classList.add('prev');
-    prevButton.textContent = '‹';
+    prevButton.innerHTML = '‹';
   
     const nextButton = document.createElement('button');
     nextButton.classList.add('next');
-    nextButton.textContent = '›';
+    nextButton.innerHTML = '›';
   
-    carouselDiv.appendChild(prevButton);
-    carouselDiv.appendChild(nextButton);
+    carousel.appendChild(prevButton);
+    carousel.appendChild(nextButton);
   
-    // Funzionalità per lo scorrimento delle slide
+    // Stato corrente
     let currentIndex = 0;
-    const slides = carouselDiv.querySelectorAll('.slide');
+    const totalSlides = item.images.length;
   
+    // Funzione per aggiornare la posizione del wrapper
+    function updateCarousel() {
+      slidesWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+  
+    // Gestione click sui pulsanti
     prevButton.addEventListener('click', () => {
-      slides[currentIndex].classList.remove('active');
-      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      slides[currentIndex].classList.add('active');
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      updateCarousel();
     });
   
     nextButton.addEventListener('click', () => {
-      slides[currentIndex].classList.remove('active');
-      currentIndex = (currentIndex + 1) % slides.length;
-      slides[currentIndex].classList.add('active');
+      currentIndex = (currentIndex + 1) % totalSlides;
+      updateCarousel();
     });
   
-    return carouselDiv;
+    // Variabili per la gestione dello swipe
+    let startX = 0;
+    let isSwiping = false;
+  
+    // Eventi touch per swipe
+    slidesWrapper.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isSwiping = true;
+    });
+  
+    slidesWrapper.addEventListener('touchmove', (e) => {
+      if (!isSwiping) return;
+      // Puoi implementare un effetto di "drag" opzionale qui
+    });
+  
+    slidesWrapper.addEventListener('touchend', (e) => {
+      if (!isSwiping) return;
+      const endX = e.changedTouches[0].clientX;
+      const diff = endX - startX;
+      // Soglia per considerare lo swipe
+      if (Math.abs(diff) > 50) {
+        if (diff < 0) {
+          // Swipe verso sinistra: slide successiva
+          currentIndex = (currentIndex + 1) % totalSlides;
+        } else {
+          // Swipe verso destra: slide precedente
+          currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        }
+        updateCarousel();
+      }
+      isSwiping = false;
+    });
+  
+    return carousel;
   }
   
   /**
-   * Crea l'elemento "item" per la pagina, includendo:
-   * - Il carosello di immagini
-   * - Il nome (title)
+   * Crea l'elemento item, che include:
+   * - Il carosello
+   * - Il titolo (name)
    * - Le informazioni aggiuntive (ID e additionalInfo)
    */
   function createItem(item) {
     const itemDiv = document.createElement('div');
     itemDiv.classList.add('item');
   
-    // Inseriamo il carosello
-    const carousel = createCarousel(item.images);
+    // Aggiunge il carosello
+    const carousel = createCarousel(item);
     itemDiv.appendChild(carousel);
   
-    // Inseriamo il nome (seconda colonna)
+    // Aggiunge il titolo
     const title = document.createElement('div');
     title.classList.add('item-title');
     title.textContent = item.name;
     itemDiv.appendChild(title);
   
-    // Inseriamo le informazioni aggiuntive (ID e additionalInfo)
+    // Aggiunge le informazioni (ID e additionalInfo)
     const infoDiv = document.createElement('div');
     infoDiv.classList.add('item-info');
   
@@ -140,8 +177,7 @@ const data = [
   }
   
   /**
-   * Funzione di inizializzazione: per ogni elemento in "data"
-   * crea l'item corrispondente e lo aggiunge al container della pagina.
+   * Inizializza la pagina creando un item per ciascun elemento di "data".
    */
   function init() {
     const container = document.getElementById('carousel-container');
@@ -152,5 +188,4 @@ const data = [
   }
   
   // Avvia l'inizializzazione al caricamento del DOM
-  document.addEventListener('DOMContentLoaded', init);
-  
+  document.addEventListener('DOMContentLoaded', init);  
