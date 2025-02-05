@@ -6,91 +6,74 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-/* Stile Carosello Esterno */
-.outer-carousel-container {
-    position: relative;
+  }
+  
+  /* Container principale per gli item */
+  .items-container {
     width: 90%;
     max-width: 800px;
-    overflow: hidden;
+  }
+  
+  /* Stile per ogni item (card) */
+  .item {
+    background: white;
     border: 2px solid #666;
     border-radius: 10px;
-    background: white;
-}
-
-.outer-carousel {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-.outer-item {
-    min-width: 100%;
+    margin-bottom: 20px;
     padding: 20px;
-    box-sizing: border-box;
-}
-
-/* Stile Carosello Interno */
-.inner-carousel-container {
+  }
+  
+  /* Stile Carosello Interno */
+  .inner-carousel-container {
     position: relative;
-    width: 80%;
-    margin: 0 auto;
+    width: 100%;
     overflow: hidden;
-}
-
-.inner-carousel {
+  }
+  
+  .inner-carousel {
     display: flex;
     transition: transform 0.3s ease-in-out;
-}
-
-.inner-carousel img {
+  }
+  
+  .inner-carousel img {
     width: 100%;
     height: 400px;
     object-fit: contain;
-}
-
-/* Pulsanti Generici */
-button {
+  }
+  
+  /* Pulsanti per il carosello interno */
+  button {
     cursor: pointer;
     background: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
     padding: 10px 15px;
     border-radius: 50%;
-}
-
-.outer-prev, .outer-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 24px;
-}
-
-.outer-prev { left: 10px; }
-.outer-next { right: 10px; }
-
-.inner-prev, .inner-next {
+  }
+  
+  .inner-prev, .inner-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
-}
-
-.inner-prev { left: 5px; }
-.inner-next { right: 5px; }
-
-/* Info Section */
-.item-info {
+  }
+  
+  .inner-prev { left: 5px; }
+  .inner-next { right: 5px; }
+  
+  /* Info Section */
+  .item-info {
     text-align: center;
     margin: 15px 0;
-}
-
-.item-info h2 {
+  }
+  
+  .item-info h2 {
     margin: 0 0 10px;
     color: #333;
-}
-
-.item-info p {
+  }
+  
+  .item-info p {
     margin: 0;
     color: #666;
-}
+  }
+  
