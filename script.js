@@ -1,51 +1,4 @@
 // Dati definiti come array di oggetti
-const data2 = [
-  {
-    id: 312426,
-    name: "Epitelio colonnare semplice umano",
-    images: [
-      "WhatsApp Image 2025-01-08 at 18.29.30 (3).jpeg",
-      "WhatsApp Image 2025-01-10 at 14.16.42.jpeg"
-    ],
-    additionalInfo: "H&E"
-  },
-  {
-    id: 313594,
-    name: "Nervo umano",
-    images: [
-      "WhatsApp Image 2025-01-08 at 18.29.30 (5).jpeg",
-      "WhatsApp Image 2025-01-08 at 18.29.31 (4).jpeg",
-      "WhatsApp Image 2025-01-08 at 18.29.31 (5).jpeg",
-      "WhatsApp Image 2025-01-10 at 14.15.52 (1).jpeg",
-      "WhatsApp Image 2025-01-10 at 14.16.29 (1).jpeg",
-      "WhatsApp Image 2025-01-10 at 14.16.29.jpeg",
-      "WhatsApp Image 2025-01-10 at 15.44.14 (1).jpeg",
-      "WhatsApp Image 2025-01-10 at 15.44.16.jpeg",
-      "WhatsApp Image 2025-01-10 at 15.44.16 (1).jpeg"
-    ],
-    additionalInfo: "H&E"
-  },
-  {
-    id: 315388,
-    name: "Fegato umano",
-    images: [
-      "WhatsApp Image 2025-01-08 at 18.29.32 (4).jpeg",
-      "WhatsApp Image 2025-01-10 at 14.23.58.jpeg",
-      "WhatsApp Image 2025-01-10 at 14.23.59 (1).jpeg",
-      "WhatsApp Image 2025-01-10 at 14.23.59.jpeg"
-    ],
-    additionalInfo: "H&E"
-  },
-  {
-    id: 313660,
-    name: "Cervelletto umano",
-    images: [
-      "WhatsApp Image 2025-01-08 at 18.29.33 (3).jpeg"
-    ],
-    additionalInfo: "Silver staining"
-  }
-];
-
 const data = [
   {
     id: "312426",
@@ -674,7 +627,7 @@ function createItem(item) {
   // Aggiunge il titolo
   const title = document.createElement('div');
   title.classList.add('item-title');
-  title.textContent = item.name;
+  title.innerHTML = item.name;
   itemDiv.appendChild(title);
 
   // Aggiunge le informazioni (ID e additionalInfo)
