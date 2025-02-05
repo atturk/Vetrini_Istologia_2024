@@ -126,7 +126,6 @@ const data = [
     id: "315648",
     name: "Polmone mammifero",
     images: [
-      "WhatsApp Image 2025-01-08 at 18.29.39 (5)-1da08ab7853c86e007ecb392aa804a661594a6f7.jpeg",
       "WhatsApp Image 2025-01-10 at 14.17.45.jpeg",
       "WhatsApp Image 2025-01-10 at 15.43.46.jpeg",
       "WhatsApp Image 2025-01-22 at 10.05.35 (1).jpeg",
