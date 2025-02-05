@@ -4,7 +4,7 @@ import json
 import os
 
 # Percorso del file TSV nella cartella "dati"
-tsv_file_path = "data/vetrini.tsv"
+tsv_file_path = "data/vetrini.txt"
 # Percorso di output per il file JS
 output_file_path = "data.js"
 
