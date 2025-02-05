@@ -1,144 +1,154 @@
-// Contenuto TSV come stringa multilinea
-const tsvData = `312426\tEpitelio colonnare semplice umano\t"<img src=""WhatsApp Image 2025-01-08 at 18.29.30 (3).jpeg""><img src=""WhatsApp Image 2025-01-10 at 14.16.42.jpeg"">"\tH&amp;E
-313594\tNervo umano\t"<img src=""WhatsApp Image 2025-01-08 at 18.29.30 (5).jpeg""><img src=""WhatsApp Image 2025-01-08 at 18.29.31 (4).jpeg""><img src=""WhatsApp Image 2025-01-08 at 18.29.31 (5).jpeg""><img src=""WhatsApp Image 2025-01-10 at 14.15.52 (1).jpeg""><img src=""WhatsApp Image 2025-01-10 at 14.16.29 (1).jpeg""><img src=""WhatsApp Image 2025-01-10 at 14.16.29.jpeg""><img src=""WhatsApp Image 2025-01-10 at 15.44.14 (1).jpeg""><img src=""WhatsApp Image 2025-01-10 at 15.44.16.jpeg""><img src=""WhatsApp Image 2025-01-10 at 15.44.16 (1).jpeg"">"\tH&amp;E
-315388\tFegato umano\t"<img src=""WhatsApp Image 2025-01-08 at 18.29.32 (4).jpeg""><img src=""WhatsApp Image 2025-01-10 at 14.23.58.jpeg""><img src=""WhatsApp Image 2025-01-10 at 14.23.59 (1).jpeg""><img src=""WhatsApp Image 2025-01-10 at 14.23.59.jpeg"">"\tH&amp;E
-313660\tCervelletto umano\t"<img src=""WhatsApp Image 2025-01-08 at 18.29.33 (3).jpeg"">"\tSilver staining`;
-
-// Funzione per elaborare il TSV e restituire un array di oggetti
-function parseTSV(data) {
-  const lines = data.trim().split('\n');
-  const items = lines.map(line => {
-    // Dividiamo la riga in colonne (split per tab)
-    const cols = line.split('\t');
-    // Prendiamo la prima colonna (ID), la seconda (nome), la terza (immagini) e le altre info
-    const id = cols[0];
-    const name = cols[1];
-    let imagesHTML = cols[2];
-
-    // Rimuoviamo le virgolette iniziali e finali (se presenti)
-    if (imagesHTML.startsWith('"') && imagesHTML.endsWith('"')) {
-      imagesHTML = imagesHTML.slice(1, -1);
+// Dati definiti come array di oggetti
+const data = [
+    {
+      id: 312426,
+      name: "Epitelio colonnare semplice umano",
+      images: [
+        "WhatsApp Image 2025-01-08 at 18.29.30 (3).jpeg",
+        "WhatsApp Image 2025-01-10 at 14.16.42.jpeg"
+      ],
+      additionalInfo: "H&E"
+    },
+    {
+      id: 313594,
+      name: "Nervo umano",
+      images: [
+        "WhatsApp Image 2025-01-08 at 18.29.30 (5).jpeg",
+        "WhatsApp Image 2025-01-08 at 18.29.31 (4).jpeg",
+        "WhatsApp Image 2025-01-08 at 18.29.31 (5).jpeg",
+        "WhatsApp Image 2025-01-10 at 14.15.52 (1).jpeg",
+        "WhatsApp Image 2025-01-10 at 14.16.29 (1).jpeg",
+        "WhatsApp Image 2025-01-10 at 14.16.29.jpeg",
+        "WhatsApp Image 2025-01-10 at 15.44.14 (1).jpeg",
+        "WhatsApp Image 2025-01-10 at 15.44.16.jpeg",
+        "WhatsApp Image 2025-01-10 at 15.44.16 (1).jpeg"
+      ],
+      additionalInfo: "H&E"
+    },
+    {
+      id: 315388,
+      name: "Fegato umano",
+      images: [
+        "WhatsApp Image 2025-01-08 at 18.29.32 (4).jpeg",
+        "WhatsApp Image 2025-01-10 at 14.23.58.jpeg",
+        "WhatsApp Image 2025-01-10 at 14.23.59 (1).jpeg",
+        "WhatsApp Image 2025-01-10 at 14.23.59.jpeg"
+      ],
+      additionalInfo: "H&E"
+    },
+    {
+      id: 313660,
+      name: "Cervelletto umano",
+      images: [
+        "WhatsApp Image 2025-01-08 at 18.29.33 (3).jpeg"
+      ],
+      additionalInfo: "Silver staining"
     }
-    
-    // Le restanti colonne (se presenti)
-    const additional = cols.slice(3).filter(col => col.trim() !== "");
-    
-    return { id, name, imagesHTML, additional };
-  });
-  return items;
-}
-
-// Funzione per modificare i src delle immagini in modo che puntino alla cartella "Immagini"
-function fixImageSources(container) {
-  const imgs = container.querySelectorAll('img');
-  imgs.forEach(img => {
-    // Se il percorso non contiene già "Immagini/", lo prependiamo
-    if (!img.getAttribute('src').startsWith('Immagini/')) {
-      img.setAttribute('src', 'Immagini/' + img.getAttribute('src'));
-    }
-  });
-}
-
-// Funzione per creare il carosello di immagini per un item
-function createCarousel(imagesHTML, itemIndex) {
-  // Creiamo un contenitore temporaneo per manipolare l'HTML
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = imagesHTML;
-  // Correggiamo i percorsi delle immagini
-  fixImageSources(tempDiv);
-
-  // Otteniamo l'elenco delle immagini create
-  const imgElements = Array.from(tempDiv.querySelectorAll('img'));
-
-  // Creiamo il contenitore del carosello
-  const carouselDiv = document.createElement('div');
-  carouselDiv.classList.add('carousel');
+  ];
   
-  // Creiamo il wrapper per le slide
-  imgElements.forEach((img, index) => {
-    const slideDiv = document.createElement('div');
-    slideDiv.classList.add('slide');
-    if(index === 0) slideDiv.classList.add('active'); // Mostriamo la prima slide
-    slideDiv.appendChild(img);
-    carouselDiv.appendChild(slideDiv);
-  });
+  /**
+   * Crea il carosello di immagini per un determinato item.
+   * Ogni immagine verrà caricata dalla cartella "Immagini".
+   */
+  function createCarousel(imageArray) {
+    // Creiamo il contenitore del carosello
+    const carouselDiv = document.createElement('div');
+    carouselDiv.classList.add('carousel');
   
-  // Aggiungiamo i pulsanti di controllo
-  const prevButton = document.createElement('button');
-  prevButton.classList.add('prev');
-  prevButton.textContent = '‹';
+    // Per ogni immagine, creiamo una slide
+    imageArray.forEach((filename, index) => {
+      const slideDiv = document.createElement('div');
+      slideDiv.classList.add('slide');
+      if (index === 0) slideDiv.classList.add('active'); // Mostra la prima slide
   
-  const nextButton = document.createElement('button');
-  nextButton.classList.add('next');
-  nextButton.textContent = '›';
+      const img = document.createElement('img');
+      // Impostiamo il src in modo da puntare alla cartella "Immagini"
+      img.src = 'Immagini/' + filename;
+      slideDiv.appendChild(img);
   
-  carouselDiv.appendChild(prevButton);
-  carouselDiv.appendChild(nextButton);
+      carouselDiv.appendChild(slideDiv);
+    });
   
-  // Funzionalità del carosello
-  let currentIndex = 0;
-  const slides = carouselDiv.querySelectorAll('.slide');
+    // Creiamo i pulsanti di controllo del carosello
+    const prevButton = document.createElement('button');
+    prevButton.classList.add('prev');
+    prevButton.textContent = '‹';
   
-  prevButton.addEventListener('click', () => {
-    slides[currentIndex].classList.remove('active');
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    slides[currentIndex].classList.add('active');
-  });
+    const nextButton = document.createElement('button');
+    nextButton.classList.add('next');
+    nextButton.textContent = '›';
   
-  nextButton.addEventListener('click', () => {
-    slides[currentIndex].classList.remove('active');
-    currentIndex = (currentIndex + 1) % slides.length;
-    slides[currentIndex].classList.add('active');
-  });
+    carouselDiv.appendChild(prevButton);
+    carouselDiv.appendChild(nextButton);
   
-  return carouselDiv;
-}
-
-// Funzione per creare un item completo da inserire nella pagina
-function createItem(item, index) {
-  const itemDiv = document.createElement('div');
-  itemDiv.classList.add('item');
+    // Funzionalità per lo scorrimento delle slide
+    let currentIndex = 0;
+    const slides = carouselDiv.querySelectorAll('.slide');
   
-  // Carosello
-  const carousel = createCarousel(item.imagesHTML, index);
-  itemDiv.appendChild(carousel);
+    prevButton.addEventListener('click', () => {
+      slides[currentIndex].classList.remove('active');
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      slides[currentIndex].classList.add('active');
+    });
   
-  // Nome (seconda colonna)
-  const title = document.createElement('div');
-  title.classList.add('item-title');
-  title.textContent = item.name;
-  itemDiv.appendChild(title);
+    nextButton.addEventListener('click', () => {
+      slides[currentIndex].classList.remove('active');
+      currentIndex = (currentIndex + 1) % slides.length;
+      slides[currentIndex].classList.add('active');
+    });
   
-  // Informazioni aggiuntive (ID e altre colonne)
-  const infoDiv = document.createElement('div');
-  infoDiv.classList.add('item-info');
+    return carouselDiv;
+  }
   
-  const idP = document.createElement('p');
-  idP.innerHTML = `<strong>ID:</strong> ${item.id}`;
-  infoDiv.appendChild(idP);
+  /**
+   * Crea l'elemento "item" per la pagina, includendo:
+   * - Il carosello di immagini
+   * - Il nome (title)
+   * - Le informazioni aggiuntive (ID e additionalInfo)
+   */
+  function createItem(item) {
+    const itemDiv = document.createElement('div');
+    itemDiv.classList.add('item');
   
-  if(item.additional.length > 0) {
-    item.additional.forEach((info, i) => {
-      const infoP = document.createElement('p');
-      infoP.innerHTML = `<strong>Info ${i+1}:</strong> ${info}`;
-      infoDiv.appendChild(infoP);
+    // Inseriamo il carosello
+    const carousel = createCarousel(item.images);
+    itemDiv.appendChild(carousel);
+  
+    // Inseriamo il nome (seconda colonna)
+    const title = document.createElement('div');
+    title.classList.add('item-title');
+    title.textContent = item.name;
+    itemDiv.appendChild(title);
+  
+    // Inseriamo le informazioni aggiuntive (ID e additionalInfo)
+    const infoDiv = document.createElement('div');
+    infoDiv.classList.add('item-info');
+  
+    const idP = document.createElement('p');
+    idP.innerHTML = `<strong>ID:</strong> ${item.id}`;
+    infoDiv.appendChild(idP);
+  
+    const additionalP = document.createElement('p');
+    additionalP.innerHTML = `<strong>Info:</strong> ${item.additionalInfo}`;
+    infoDiv.appendChild(additionalP);
+  
+    itemDiv.appendChild(infoDiv);
+  
+    return itemDiv;
+  }
+  
+  /**
+   * Funzione di inizializzazione: per ogni elemento in "data"
+   * crea l'item corrispondente e lo aggiunge al container della pagina.
+   */
+  function init() {
+    const container = document.getElementById('carousel-container');
+    data.forEach(item => {
+      const itemElement = createItem(item);
+      container.appendChild(itemElement);
     });
   }
   
-  itemDiv.appendChild(infoDiv);
+  // Avvia l'inizializzazione al caricamento del DOM
+  document.addEventListener('DOMContentLoaded', init);
   
-  return itemDiv;
-}
-
-// Funzione di inizializzazione: elabora il TSV e popola la pagina
-function init() {
-  const items = parseTSV(tsvData);
-  const container = document.getElementById('carousel-container');
-  items.forEach((item, index) => {
-    const itemElement = createItem(item, index);
-    container.appendChild(itemElement);
-  });
-}
-
-// Inizializziamo al caricamento del DOM
-document.addEventListener('DOMContentLoaded', init);
