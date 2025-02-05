@@ -50,24 +50,26 @@ const data = [
    * Crea il carosello di immagini per un determinato item.
    * Ogni immagine verrà caricata dalla cartella "Immagini".
    */
-  function createCarousel(imageArray) {
+  function createCarousel(item) {
     // Creiamo il contenitore del carosello
-    const carouselDiv = document.createElement('div');
-    carouselDiv.classList.add('carousel');
+    const carousel = document.createElement('div');
+    carousel.classList.add('carousel');
   
-    // Per ogni immagine, creiamo una slide
-    imageArray.forEach((filename, index) => {
+    // Puliamo il contenuto e creiamo per ogni immagine una slide
+    carousel.innerHTML = '';
+    item.images.forEach((image, index) => {
       const slideDiv = document.createElement('div');
       slideDiv.classList.add('slide');
-      if (index === 0) slideDiv.classList.add('active'); // Mostra la prima slide
+      // Mostriamo la prima slide impostandola come attiva
+      if (index === 0) slideDiv.classList.add('active');
   
-      const img = document.createElement('img');
-      // Impostiamo il src in modo da puntare alla cartella "Immagini"
-      img.src = 'Immagini/' + filename;
-      slideDiv.appendChild(img);
+      const imgElement = document.createElement('img');
+      imgElement.src = `Immagini/${image}`;
+      slideDiv.appendChild(imgElement);
   
-      carouselDiv.appendChild(slideDiv);
+      carousel.appendChild(slideDiv);
     });
+  
   
     // Creiamo i pulsanti di controllo del carosello
     const prevButton = document.createElement('button');
