@@ -46,13 +46,12 @@ const data = [
     }
 ];
 
-  
-  /**
-   * Crea un elemento "item" contenente:
-   * - Un carosello interno per le immagini.
-   * - Una sezione informativa con nome e ulteriori dettagli.
-   */
-  function createItemElement(item) {
+/**
+ * Crea un elemento "item" contenente:
+ * - Un carosello interno per le immagini.
+ * - Una sezione informativa con nome e ulteriori dettagli.
+ */
+function createItemElement(item) {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'item';
     
@@ -117,4 +116,3 @@ const data = [
   
   // Inizializza tutto al caricamento della pagina
   window.onload = initializeItems;
-  
